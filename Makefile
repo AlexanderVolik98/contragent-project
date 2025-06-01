@@ -8,7 +8,7 @@ NPM_INSTALL_CMD=npm install
 NPM_BUILD_CMD=npm run build
 
 up:
-	docker compose up -d
+	docker compose --env-file .env.docker up -d
 
 install:
 	docker compose exec $(PHP_CONTAINER) $(COMPOSER_CMD)
