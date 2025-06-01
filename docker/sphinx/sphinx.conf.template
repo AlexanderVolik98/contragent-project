@@ -64,8 +64,6 @@ index company_idx
     morphology      = stem_ru,stem_en
     min_word_len    = 3
 
-    docinfo      = extern
-    charset_type    = utf-8
     charset_table = 0..9, A..Z->a..z, _, a..z, U+410..U+42F->U+430..U+44F, U+430..U+44F, U+401->U+0435, U+451->U+0435, U+0419, U+0439
     min_prefix_len    = 3
     #min_infix_len     = 1
@@ -73,7 +71,6 @@ index company_idx
     ignore_chars    = ',/,\,+,-,.
     #index_exact_words    = 1
     expand_keywords    = 1
-    enable_star      = 1
 }
 
 # источник для Individual
@@ -145,8 +142,6 @@ index individual_idx
     morphology      = stem_ru,stem_en
     min_word_len    = 3
 
-    docinfo         = extern
-    charset_type    = utf-8
     # (твоя таблица charset_table)
     charset_table   = 0..9, A..Z->a..z, _, a..z, U+410..U+42F->U+430..U+44F, \
                       U+430..U+44F, U+401->U+0435, U+451->U+0435, U+0419, U+0439
@@ -154,7 +149,6 @@ index individual_idx
     html_strip      = 1
     ignore_chars    = ',/,\,+,-,.
     expand_keywords = 1
-    enable_star     = 1
 }
 
 index all_entities
@@ -181,5 +175,4 @@ searchd
     preopen_indexes = 1
     unlink_old      = 1
     workers         = threads
-    max_matches = 10000000
 }

@@ -13,7 +13,7 @@
 /phpunit.xml
 .phpunit.result.cache
 .env.docker
-
+/docker/sphinx/sphinx.conf
 .phpunit.result.cache
 /phpunit.xml
 
