@@ -3,11 +3,11 @@
 source company_src
 {
     type            = pgsql
-    sql_host        = 127.0.0.1
-    sql_port        = 32768
-    sql_user        = app
-    sql_pass        = password
-    sql_db          = app
+    sql_host        = postgres
+    sql_port        = 5432
+    sql_user        = ${POSTGRES_USER}
+    sql_pass        = ${POSTGRES_PASSWORD}
+    sql_db          = ${POSTGRES_DB}
 
 sql_query = \
   SELECT c.id, c.name, c.inn, c.ogrn, c.kpp, c.phones, c.emails, c.slug, \
@@ -80,11 +80,11 @@ index company_idx
 source individual_src
 {
     type            = pgsql
-    sql_host        = 127.0.0.1
-    sql_port        = 32768
-    sql_user        = app
-    sql_pass        = password
-    sql_db          = app
+    sql_host        = postgres
+    sql_port        = 5432
+    sql_user        = ${POSTGRES_USER}
+    sql_pass        = ${POSTGRES_PASSWORD}
+    sql_db          = ${POSTGRES_DB}
 
 sql_query = \
   SELECT i.id, \
