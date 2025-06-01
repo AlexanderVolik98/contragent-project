@@ -3,6 +3,8 @@ version: '3.9'
 services:
   ###> PostgreSQL ###
   database:
+    env_file:
+      - .env.docker
     image: postgres:${POSTGRES_VERSION:-16}-alpine
     container_name: postgres
     environment:

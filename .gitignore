@@ -12,6 +12,7 @@
 /sphinx_data
 /phpunit.xml
 .phpunit.result.cache
+.env.docker
 
 .phpunit.result.cache
 /phpunit.xml
