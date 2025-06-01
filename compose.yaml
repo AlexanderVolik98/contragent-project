@@ -47,7 +47,6 @@ services:
       - database
     command: sh -c "indexer --all --config /opt/sphinx/conf/sphinx.conf && searchd --nodetach --config /opt/sphinx/conf/sphinx.conf"
 
-
   ###> Nginx ###
   nginx:
     container_name: nginx
@@ -61,6 +60,17 @@ services:
       - php
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+  ###> NodeJs ###
+  node:
+    image: node:20.16.0-alpine
+    container_name: node
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - php
+    command: sh -c "while sleep 3600; do :; done"
 
 volumes:
   database_data:
