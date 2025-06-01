@@ -1,0 +1,975 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Минимальная высота экрана */
+    background-color: #f3f3f3;
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+.opf-row {
+    position: relative; /* чтобы тултип позиционировался относительно строки */
+}
+
+.tooltip-icon {
+    display: inline-block;
+    margin-left: 6px;
+    color: #007BFF;
+    cursor: help;
+    font-weight: bold;
+    border: 1px solid #007BFF;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    user-select: none;
+}
+
+.custom-tooltip {
+    position: absolute;
+    top: 100%; /* сразу под строкой */
+    left: 0;
+    transform: translateY(6px);
+    background: #ffffff;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    z-index: 20;
+}
+
+/* Стрелочка у тултипа */
+.custom-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 12px;
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: #ccc transparent transparent transparent;
+}
+
+.custom-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 12px;
+    border-width: 5px 5px 0 5px;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #233461;
+    font-size: 25px;
+    align-self: center;
+}
+
+h2 {
+    color: #233461;
+    margin: 0;
+    font-size: 20px;
+    align-self: center;
+}
+
+.page {
+    flex-grow: 1; /* Заставляем элемент занять всё доступное пространство */
+}
+
+.svg-icon-individual, .svg-icon-company {
+    width: 20px;
+    height: 20px;
+}
+
+.svg-icon-error, .svg-icon-question {
+    width: 40px;
+    height: 40px;
+}
+
+.svg-icon-phone, .svg-icon-email {
+    width: 30px;
+    height: 30px;
+}
+/* Универсальный стиль для ссылок */
+.link {
+    color: #007bff !important;
+    text-decoration: none;
+    cursor: pointer;
+}
+.link:hover {
+    text-decoration: underline;
+}
+
+.secondary-okveds-list {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.card--details {
+    /* Дополнительные стили для карточки с деталями можно добавить здесь */
+}
+.card {
+    border: 1px solid rgba(10, 9, 11, 0.12);
+    transition: border 0.3s ease; /* Плавное изменение границы */
+    padding: 10px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.cards-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+/* Каждая «карточка» займет примерно половину контейнера */
+.cards-row__item {
+    flex: 1 1 calc(50% - 20px); /* Учитываем отступ (gap: 20px) */
+    box-sizing: border-box;      /* Чтобы границы и паддинги не ломали расчёт ширины */
+}
+
+.filials-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.card--details-page {
+    min-width: 1000px;
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.result-info {
+    font-size: 16px;
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    line-height: 22px;
+    color: #233461;
+    display: flex;
+    gap: 5px;
+}
+
+.details-value {
+    color: #353535;
+}
+
+.details-value--okved {
+    font-size: 14px !important;
+}
+
+.red-status {
+    color: rgb(204, 38, 38);
+}
+
+.grey-status {
+    color: grey;
+}
+.green-status {
+    color: green;
+}
+.purple-status {
+    color: purple;
+}
+.yellow-status {
+    color: yellow;
+}
+
+.block-title {
+    margin-bottom: 15px;
+}
+
+.block-error, .block-not-found {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+}
+
+.block-error-text, .block-not-found-text {
+    align-self: center;
+    font-size: 17px;
+}
+
+.input-focused {
+    border: 1px solid #007bff !important;  /* Подсветка синей границей */
+}
+
+.search-button {
+    min-height: 32px;
+    min-width: 50px;
+    padding: 10px 10px;
+    background: #233461;
+    border-radius: 12px;
+    border: 1px solid #E3E4E8;
+    backdrop-filter: blur(16px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+.search-button div {
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    margin: 5px;
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    line-height: 22px;
+    word-wrap: break-word;
+}
+
+.loading-spinner-gif {
+    width: 50px;
+    height: 50px;
+}
+
+
+.extended-search-button {
+    padding: 10px 15px;
+    background: #233461;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.extended-search-button:hover {
+    background: #1a2e5a;
+}
+
+.card-fixed-min-width {
+    width: 800px;
+}
+/* Стиль для блока с гифкой загрузки */
+.loading-spinner {
+    text-align: center;
+}
+
+.flex-hr {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid #8697b6; /* или любой другой стиль */
+    margin: 10px 0;
+}
+
+.company-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.missing-data {
+    font-style: italic;
+    color: #888;
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+}
+.card--details {
+    /* Дополнительные стили для карточки с деталями можно добавить здесь */
+}
+
+.company-details {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 10px;
+}
+
+.company-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.company-columns {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 0 50px;
+}
+
+.details-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detail-row {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: baseline;
+}
+
+.detail-row__filial {
+    font-size: 14px;
+}
+
+.filial-add-value {
+    color: #616161;
+}
+
+.detail-row b {
+    min-width: 50px;
+    text-align: left;
+}
+
+.detail-value {
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+}
+
+.detail-key {
+    color: #233461;
+}
+
+.detail-value--highlight {
+    font-weight: bold;
+}
+
+.detail-value--small {
+    font-size: 12px;
+}
+
+.status-comment {
+    font-size: 13px;
+    margin-left: 10px;
+}
+
+.detail-value--status {
+    gap: 10px;
+    align-items: center;
+}
+
+.status-row {
+    background-color: #f0f8ff;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.detail-value--processing {
+    font-style: italic;
+    color: #888;
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.status-dates {
+    font-size: 12px;
+    color: #505050;
+}
+
+.managers-title {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #233461;
+}
+
+.manager-card {
+    background: #f9f9f9;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 300px;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.manager-header {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.manager-link {
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.manager-link:hover {
+    text-decoration: underline;
+}
+
+.manager-inn {
+    font-size: 12px;
+    color: grey;
+}
+
+.cards-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between; /* Равномерное распределение по ширине */
+}
+
+/* Новый блок стилей для Пенсионного фонда */
+.pension-fond-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.pension-fond-name {
+    font-size: 14px;
+    color: #333;
+}
+
+.authority-date {
+    font-size: 12px;
+    color: #616161;
+}
+
+/* Универсальный стиль для ссылок */
+.link {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.predecessors-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.detail-value--opf {
+    align-items: center;
+}
+
+.successors-row {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+/* Хэдер */
+.header {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.logo {
+    height: 70px;
+    width: 180px;
+    margin-left: 200px;
+}
+
+/* Футер */
+.footer {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #233461;
+    color: white;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.footer:hover {
+    box-shadow: 0 -4px 20px rgba(0, 153, 255, 0.5);
+}
+
+.footer-content {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.copyright {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.contacts-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.contact-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    transition: 0.3s ease;
+}
+
+.contact-card:hover {
+    background: #f1f1f1;
+}
+
+.contact-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-title {
+    font-weight: bold;
+    color: #233461;
+    margin-bottom: 3px;
+}
+
+.contact-details {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contact-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.contact-link:hover {
+    text-decoration: underline;
+}
+
+.no-data {
+    color: #616161;
+}
+
+.legend-item {
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #000; /* текст по умолчанию черный */
+    cursor: pointer; /* курсор pointer при наведении */
+}
+
+.legend-item .legend-dot {
+    width: 14px; /* сделаем dot крупнее */
+    height: 14px;
+    transition: background-color 0.2s ease;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-item.hovered {
+    color: #36A2EB; /* при hover на текст меняем цвет */
+}
+
+.info-blocks-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; /* если нужно переносить блоки на новую строку */
+    gap: 20px;
+}
+
+.cards-row__item {
+    max-width: 50%;
+    box-sizing: border-box; /* важно для правильного учета padding */
+}
+
+.cards-row__item-single {
+    flex: 0 0 50%;
+}
+
+.card.cards-row__item {
+    /* Можно добавить дополнительные стили для карточки, если требуется */
+    padding: 20px;
+}
+
+.detail-row.clickable {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    user-select: none;
+}
+
+.detail-key.link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.detail-key.link:hover {
+    text-decoration: underline;
+}
+
+.toggle-icon {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.licenses-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+}
+
+.license-card {
+    width: calc(45% - 8px);
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.single-license {
+    width: 100%;
+}
+
+.license-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.license-number {
+    color: #233461;
+}
+
+.license-series {
+    color: #777;
+    margin-left: 5px;
+}
+
+.license-details {
+    font-size: 14px;
+}
+
+.license-row {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 4px;
+}
+
+.license-label {
+    font-weight: bold;
+    color: #555;
+}
+
+.license-value {
+    color: #333;
+}
+
+.details {
+    cursor: pointer;
+}
+
+.finances-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.finances-table th,
+.finances-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.finances-table th {
+    background-color: #f4f4f4;
+    text-align: left;
+}
+
+.filials-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filial-item {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.filial-item:last-child {
+    border-bottom: none;
+}
+
+.filial-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #233461;
+    text-decoration: none;
+}
+
+.filial-name:hover {
+    text-decoration: underline;
+}
+
+.filial-kpp {
+    font-size: 14px;
+    color: #616161;
+}
+
+.individual-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.individual-details {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 10px;
+}
+
+.individual-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.individual-columns {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 0 50px;
+}
+
+.detail-value--empty {
+    font-style: italic;
+    color: #bbb;
+}
+
+.details-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detail-row {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: baseline;
+}
+
+.detail-row__filial {
+    font-size: 14px;
+}
+
+.filial-add-value {
+    color: #616161;
+}
+
+.detail-row b {
+    min-width: 50px;
+    text-align: left;
+}
+
+.detail-value {
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.detail-key {
+    color: #233461;
+}
+
+.detail-value--highlight {
+    font-weight: bold;
+}
+
+.detail-value--small {
+    font-size: 12px;
+}
+
+.status-comment {
+    font-size: 13px;
+    margin-left: 10px;
+}
+
+.status-row {
+    background-color: #f0f8ff;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-dates {
+    font-size: 12px;
+    color: #505050;
+}
+
+.red-status {
+    color: red;
+}
+
+.green-status {
+    color: green;
+}
+
+.orange-status {
+    color: orange;
+}
+
+.grey-status {
+    color: grey;
+}
+
+.purple-status {
+    color: purple;
+}
+
+.managers-title {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #233461;
+}
+
+.manager-card {
+    background: #f9f9f9;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 300px;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.manager-header {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.manager-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Элементы будут переноситься на следующую строку */
+    gap: 16px; /* Отступы между элементами */
+}
+
+.manager-item {
+    flex: 0 0 calc(50% - 8px); /* Каждый элемент будет занимать 50% ширины с учетом отступов */
+    box-sizing: border-box;
+}
+
+.manager-link {
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.manager-link:hover {
+    text-decoration: underline;
+}
+
+.manager-inn {
+    font-size: 12px;
+    color: grey;
+}
+
+.cards-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between; /* Равномерное распределение по ширине */
+}
+
+/* Новый блок стилей для Пенсионного фонда */
+.pension-fond-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.pension-fond-name {
+    font-size: 14px;
+    color: #333;
+}
+
+.authority-date {
+    font-size: 12px;
+    color: #616161;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.predecessors-row {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.successors-row {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}

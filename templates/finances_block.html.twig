@@ -1,0 +1,69 @@
+    <h2 class="block-title">Финансы</h2>
+    <table class="finances-table">
+        <thead>
+        <tr>
+            <th>Показатель</th>
+            <th>Значение</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Год</td>
+            <td>{{ company.finance.year ?? 'нет данных' }}</td>
+        </tr>
+        <tr>
+            <td>Доход</td>
+            <td>
+                {% if company.finance.income is defined and company.finance.income %}
+                    {{ company.finance.income|number_format(0, '.', ' ') }}
+                {% else %}
+                    нет данных
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Расход</td>
+            <td>
+                {% if company.finance.expense is defined and company.finance.expense %}
+                    {{ company.finance.expense|number_format(0, '.', ' ') }}
+                {% else %}
+                    нет данных
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Выручка</td>
+            <td>
+                {% if company.finance.revenue is defined and company.finance.revenue %}
+                    {{ company.finance.revenue|number_format(0, '.', ' ') }}
+                {% else %}
+                    нет данных
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Долги</td>
+            <td>
+                {% if company.finance.debt is defined and company.finance.debt %}
+                    {{ company.finance.debt|number_format(0, '.', ' ') }}
+                {% else %}
+                    нет данных
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Налоговая система</td>
+            <td>{{ company.finance.taxSystem ?? 'нет данных' }}</td>
+        </tr>
+        <tr>
+            <td>Штрафы</td>
+            <td>
+                {% if company.finance.penalty is defined and company.finance.penalty %}
+                    {{ company.finance.penalty|number_format(0, '.', ' ') }}
+                {% else %}
+                    нет данных
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>

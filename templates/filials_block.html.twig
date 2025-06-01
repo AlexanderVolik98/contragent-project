@@ -1,0 +1,16 @@
+<h2 class="block-title">Филиалы</h2>
+
+{% if company.filials is not empty %}
+    <ul class="filials-list">
+        {% for filial in company.filials %}
+            <li class="filial-item">
+                <a class="filial-name" href="/company/{{ filial.slug }}">
+                    {{ filial.name }}
+                </a>
+                <span class="filial-kpp"><strong>КПП:</strong> {{ filial.kpp }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет данных по филиалам.</p>
+{% endif %}

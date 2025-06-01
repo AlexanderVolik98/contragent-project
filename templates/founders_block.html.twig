@@ -1,0 +1,36 @@
+<div class="{% if company.foundersStatus %} card--loading {% endif %}">
+    <h2 class="block-title">Основатели</h2>
+
+    {% if company.foundersStatus == 'processing' %}
+        <div class="info-message">
+            Данные по основателям загружаются. Пожалуйста, подождите пару минут.
+        </div>
+    {% elseif company.foundersStatus == 'ok' %}
+        <div class="chart-flex-container">
+            <div class="chart-container">
+                <canvas id="foundersChart"
+                        data-founders='{{ company.jsonFoundedBy | json_encode() }}'
+                        data-colors-count="{{ company.foundedBy|length }}"
+                        data-colors=""
+                ></canvas>
+            </div>
+            <ul class="custom-legend" id="founders-legend">
+                {% for founderProfile in company.foundedBy %}
+                    {% set founder = (founderProfile.type.value == "LEGAL" ? founderProfile.company : founderProfile.individual) %}
+                    <li
+                            data-slug="{{ founder.slug }}"
+                            data-type="{{ founderProfile.type.value }}"
+                            class="legend-item"
+                    >
+                        <span class="legend-dot"></span>
+                        {% if (founder.type == 'individual') %}
+                            {{ founder.surname ~ ' ' ~ founder.name ~ ' ' ~ founder.patronymic }} ({{ founderProfile.share.value }}%)
+                        {% else %}
+                            {{ founder.name }} ({{ founderProfile.share.value }}%)
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>

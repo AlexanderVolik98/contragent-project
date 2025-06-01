@@ -1,0 +1,76 @@
+{# Лицензии компании #}
+<div class="detail-row clickable" id="toggle-licenses">
+    <b class="detail-key link">Лицензии:</b>
+    <span class="toggle-icon" id="licenses-icon">▶</span>
+</div>
+
+<div id="licenses-block" class="licenses-info" hidden>
+    {% for license in company.licenses %}
+        <div class="license-card {{ company.licenses|length == 1 ? 'single-license' }}">
+            <div class="license-header">
+                <span class="license-number">{{ license.number }}</span>
+                {% if license.series %}
+                    <span class="license-series">({{ license.series }})</span>
+                {% endif %}
+            </div>
+
+            <div class="license-details">
+                <div class="license-row">
+                    <span class="license-label">Дата выдачи:</span>
+                    <span class="license-value">{{ license.issueDate|date('Y.m.d') }}</span>
+                </div>
+                <div class="license-row">
+                    <span class="license-label">Выдана:</span>
+                    <span class="license-value">{{ license.issueAuthority }}</span>
+                </div>
+                {% if license.validFrom %}
+                    <div class="license-row">
+                        <span class="license-label">Действует с:</span>
+                        <span class="license-value">{{ license.validFrom|date('Y.m.d') }}</span>
+                    </div>
+                {% endif %}
+                <div class="license-row">
+                    <span class="license-label">Действует до:</span>
+                    <span class="license-value">{{ license.validTo|date('Y.m.d') }}</span>
+                </div>
+                {% if license.suspendDate %}
+                    <div class="license-row">
+                        <span class="license-label">Приостановлена:</span>
+                        <span class="license-value">{{ license.suspendDate|date('Y.m.d') }}</span>
+                    </div>
+                {% endif %}
+                {% if license.suspendAuthority %}
+                    <div class="license-row">
+                        <span class="license-label">Приостановлена (орган):</span>
+                        <span class="license-value">{{ license.suspendAuthority }}</span>
+                    </div>
+                {% endif %}
+                {% if license.activities is defined and license.activities|length %}
+                    <div class="license-row">
+                        <span class="license-label">Деятельность:</span>
+                        <span class="license-value">
+              {% for activity in license.activities %}
+                  {% set word_count = activity|split(' ')|length %}
+                  {% if word_count <= 20 %}
+                      {{ activity }}
+                  {% else %}
+                      <details>
+                    <summary class="link">Подробнее</summary>
+                    <span>{{ activity }}</span>
+                  </details>
+                  {% endif %}
+                  {% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </span>
+                    </div>
+                {% endif %}
+                {% if license.addresses %}
+                    <div class="license-row">
+                        <span class="license-label">Адреса:</span>
+                        <span class="license-value">{{ license.addresses }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

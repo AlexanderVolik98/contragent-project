@@ -1,0 +1,208 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+        <div class="individual-page">
+                <h1>{{ individual.surname ~ ' ' ~ individual.name ~ ' ' ~ individual.patronymic }}</h1>
+
+                <div class="card card--details">
+                        <section class="individual-details">
+                                <h2>Основные данные</h2>
+                                <div class="individual-info">
+                                        <div class="individual-columns">
+                                                <div class="details-column">
+                                                        <div class="detail-row">
+                                                                <b class="detail-key">ИНН:</b>
+                                                                <span class="detail-value {{ individual.inn is empty ? 'detail-value--empty' }}">
+                {{ individual.inn ?: 'нет данных' }}
+              </span>
+                                                        </div>
+                                                        <div class="detail-row">
+                                                                <b class="detail-key">ОГРНИП:</b>
+                                                                <span class="detail-value {{ individual.ogrnip is empty ? 'detail-value--empty' }}">
+                {{ individual.ogrnip ?: 'нет данных' }}
+              </span>
+                                                        </div>
+                                                </div>
+
+                                                <div class="details-column">
+                                                        {% for field, label in {
+                                                                'okpo': 'ОКПО',
+                                                                'okato': 'ОКАТО',
+                                                                'oktmo': 'ОКТМО',
+                                                                'okogu': 'ОКОГУ'
+                                                        } %}
+                                                                <div class="detail-row">
+                                                                        <b class="detail-key">{{ label }}:</b>
+                                                                        <span class="detail-value {{ attribute(individual, field) is empty ? 'detail-value--empty' }}">
+                  {{ attribute(individual, field) ?: 'нет данных' }}
+                </span>
+                                                                </div>
+                                                        {% endfor %}
+                                                </div>
+
+                                                <div class="details-column">
+                                                        <div class="detail-row">
+                                                                <b class="detail-key">ОКФС:</b>
+                                                                <span class="detail-value {{ individual.okfs is empty ? 'detail-value--empty' }}">
+                {{ individual.okfs ?: 'нет данных' }}
+              </span>
+                                                        </div>
+                                                </div>
+                                        </div>
+
+                                    {% if individual.state.status.value != 'UNDEFINED' %}
+                                        {% if individual.state %}
+                                                {% set statusMap = {
+                                                        'LIQUIDATED': 'Ликвидирован',
+                                                        'ACTIVE': 'Действующий',
+                                                        'SUSPENDED': 'Приостановлен',
+                                                        'INACTIVE': 'Неактивен',
+                                                        'REORGANIZING': 'Реорганизация',
+                                                        'UNDEFINED': 'Неизвестен'
+                                                } %}
+                                                {% set colorMap = {
+                                                        'LIQUIDATED': 'red-status',
+                                                        'ACTIVE': 'green-status',
+                                                        'SUSPENDED': 'orange-status',
+                                                        'REORGANIZING': 'orange-status',
+                                                        'INACTIVE': 'grey-status',
+                                                        'UNDEFINED': 'purple-status'
+                                                } %}
+
+                                                {% set statusClass = colorMap[individual.state.status.value]|default('') %}
+                                                <div class="detail-row status-row">
+                                                        <span><b class="detail-key">Статус:</b></span>
+                                                        <span class="detail-value">
+              <span class="{{ statusClass }}">{{ statusMap[individual.state.status.value]|default(individual.state.status.value) }}</span>
+              <span class="status-dates">| дата регистрации: {{ individual.state.registrationDate|date('Y.m.d') }} | дата последних изменений: {{ individual.state.actualityDate|date('Y.m.d') }}</span>
+            </span>
+                                                </div>
+
+                                                {% if individual.state.comment %}
+                                                        <span class="status-comment {{ statusClass }}">
+              {{ individual.state.liquidationDate ~ ' ' ~ individual.state.comment }}
+            </span>
+                                                {% endif %}
+                                        {% endif %}
+                                        {% endif %}
+
+                                        {% if individual.okved %}
+                                                <div class="detail-row">
+                                                        <span class="detail-value">{{ individual.okved.name ?: 'нет данных' }}</span>
+                                                </div>
+                                        {% endif %}
+
+                                        {% if individual.secondaryOkveds is not empty %}
+                                            <div class="detail-row clickable" id="toggle-okveds">
+                                                <b class="detail-key link">Остальные виды деятельности по ОКВЭД:</b>
+                                                <span class="toggle-icon">▶</span>
+                                            </div>
+                                            <ul class="secondary-okveds-list" id="secondary-okveds" hidden>
+                                                {% for secondaryOkved in individual.secondaryOkveds %}
+                                                    <li class="detail-row okved-item">
+                                                        <b class="detail-key">{{ secondaryOkved.code }}</b>
+                                                        <span class="detail-value">{{ secondaryOkved.name }}</span>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+
+                                        {% if individual.address.fullAddress %}
+                                                <div class="detail-row">
+                                                        <b class="detail-key">Город:</b>
+                                                        <span class="detail-value">{{ individual.address.fullAddress }}</span>
+                                                </div>
+                                        {% endif %}
+
+                                        {% if individual.managedCompanies is not empty %}
+                                                <div class="detail-row managers-title"><b class="detail-key">Руководитель:</b></div>
+                                                <div class="manager-wrapper">
+                                                        {% for company in individual.managedCompanies %}
+                                                                <div class="manager-card manager-item">
+                                                                        <div class="manager-header">
+                                                                                <span class="manager-post">{{ company.post|lower }} с {{ company.startDate|date('Y.m.d') }}</span>
+                                                                        </div>
+                                                                        <a href="/company/{{ company.slug }}" class="link manager-link">
+                                                                                {{ company.name }}
+                                                                        </a>
+                                                                        <span class="manager-inn">ИНН: {{ company.inn }}</span>
+                                                                </div>
+                                                        {% endfor %}
+                                                </div>
+                                        {% endif %}
+
+                                        {% if individual.taxService %}
+                                                <div class="detail-row">
+                                                        <b class="detail-key">Налоговый орган:</b>
+                                                        <span class="detail-value">{{ individual.taxService.name }}</span>
+                                                        <span class="authority-date">Дата постановки на учет: {{ individual.taxReport.issueDate|date('Y.m.d') }}</span>
+                                                </div>
+                                        {% endif %}
+
+                                        {% if individual.pensionFond %}
+                                                <div class="detail-row">
+                                                        <b class="detail-key">Пенсионный фонд:</b>
+                                                        <div class="detail-value pension-fond-block">
+                                                                <span>{{ individual.pensionFond.name }}</span>
+                                                                <span class="authority-date">Дата постановки на учет: {{ individual.pensionFondRegistration.issueDate|date('Y.m.d') }}</span>
+                                                        </div>
+                                                </div>
+                                        {% endif %}
+
+                                        {% if individual.socialInsuranceFond %}
+                                                <div class="detail-row">
+                                                        <b class="detail-key">Фонд соц. страхования:</b>
+                                                        <div class="detail-value pension-fond-block">
+                                                                <span>{{ individual.socialInsuranceFond.name }}</span>
+                                                                <span class="authority-date">Дата постановки на учет: {{ individual.socialInsuranceFondRegistration.issueDate|date('Y.m.d') }}</span>
+                                                        </div>
+                                                </div>
+                                        {% endif %}
+
+                                    <div class="contacts-grid">
+
+                                        {# Блок телефонов #}
+                                        {% if individual.phones|length > 0 %}
+                                            <div class="contact-card">
+                                                <img class="contact-icon" src="{{ asset('phone.svg') }}" alt="телефон">
+                                                <div class="contact-info">
+                                                    <span class="contact-title">Телефоны</span>
+                                                    <div class="contact-details">
+                                                        {% for phone in individual.phones %}
+                                                            <a href="tel:{{ phone.value }}" class="contact-link">{{ phone.value }}</a>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="contact-card">
+                                                <span class="no-data">Нет данных по телефонам</span>
+                                            </div>
+                                        {% endif %}
+
+                                        {# Блок email #}
+                                        {% if individual.emails != null %}
+                                            <div class="contact-card">
+                                                <img class="contact-icon" src="{{ asset('email.svg') }}" alt="почта">
+                                                <div class="contact-info">
+                                                    <span class="contact-title">Email</span>
+                                                    <div class="contact-details">
+                                                        {% for email in individual.emails %}
+                                                            <a href="mailto:{{ email.value }}" class="contact-link">{{ email.value|lower }}</a>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="contact-card">
+                                                <span class="no-data">Нет данных по email</span>
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                        </section>
+                </div>
+        </div>
+
+{% endblock %}
