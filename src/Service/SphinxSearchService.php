@@ -9,7 +9,6 @@ class SphinxSearchService
 
     public function __construct(string $host, int $port, string $db)
     {
-//        dd($host, $port, $db);
         $this->sphinx = new PDO(
             sprintf('mysql:host=%s;port=%d;dbname=%s', $host, $port, $db),
             '', ''
