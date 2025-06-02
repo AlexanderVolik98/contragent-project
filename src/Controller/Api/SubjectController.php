@@ -4,19 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Repository\CompanyRepository;
-use App\Repository\IndividualRepository;
-use App\Service\CompanyService;
-use App\Service\IndividualService;
 use App\Service\SearchService;
-use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Lib\SphinxClient;
 
 final class SubjectController extends AbstractController
 {

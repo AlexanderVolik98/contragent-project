@@ -7,6 +7,7 @@ use App\Helper\OwnershipHelper;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -160,7 +161,7 @@ class Company implements \JsonSerializable
     #[ORM\OneToMany(targetEntity: CompanyHistory::class, mappedBy: "company")]
     private Collection $history;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true, options: ['jsonb' => true])]
     private ?array $data = null;
 
     #[ORM\OneToMany(
