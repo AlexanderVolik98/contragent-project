@@ -8,46 +8,40 @@ source company_src
     sql_db          = ${POSTGRES_DB}
 
     sql_query = \
-      SELECT c.name, c.inn, c.ogrn, c.kpp, c.phones, c.emails, c.slug, \
-             cc.value AS capital_value, \
-             'Company' AS entity_type, \
-             ss.status AS state_status, \
-             TO_CHAR(ss.registration_date, 'YYYYMMDD')::BIGINT AS registration_date_int, \
-             r.name AS region_name, \
-             opf.abbreviation as opf_abbreviation, \
-             o.name AS okved_name, \
-             CASE ss.status \
-               WHEN 'ACTIVE' THEN 1 \
-               WHEN 'REORGANIZING' THEN 2 \
-               WHEN 'LIQUIDATING' THEN 3 \
-               WHEN 'LIQUIDATED' THEN 4 \
-               WHEN 'BANKRUPT' THEN 5 \
-               ELSE 6 \
-             END AS state_status_order \
-      FROM company c \
-      LEFT JOIN company_capital cc ON cc.company_id = c.id \
-      LEFT JOIN subject_state ss ON ss.company_id = c.id \
-      LEFT JOIN subject_address sa ON sa.company_id = c.id \
-      LEFT JOIN opf ON opf.id = c.opf_id \
-      LEFT JOIN region r ON r.id = sa.region_id \
-      LEFT JOIN subject_okved sok ON sok.company_id = c.id AND sok.is_primary = true \
-      LEFT JOIN okved o ON o.code = sok.okved_id
-
-    sql_attr_string = name
-    sql_attr_string = inn
-    sql_attr_string = ogrn
-    sql_attr_string = kpp
-    sql_attr_string = region_name
-    sql_attr_string = slug
-    sql_attr_string = phones
-    sql_attr_string = emails
-    sql_attr_string = okved_name
-    sql_attr_string = opf_abbreviation
-    sql_attr_string = state_status
-    sql_attr_string = entity_type
-    sql_attr_uint   = state_status_order
-    sql_attr_bigint = registration_date_int
-    sql_attr_bigint = capital_value
+SELECT \
+  c.id, \
+  c.name            AS name, \
+  c.name            AS name_field, \
+  c.inn             AS inn_field, \
+  c.inn             AS inn, \
+  c.ogrn            AS ogrn_field, \
+  c.ogrn            AS ogrn, \
+  c.kpp             AS kpp_field, \
+  c.kpp             AS kpp, \
+  c.slug            AS slug, \
+  cc.value          AS capital_value, \
+  'Company'         AS entity_type, \
+  ss.status         AS state_status, \
+  TO_CHAR(ss.registration_date, 'YYYYMMDD')::BIGINT AS registration_date_int, \
+  r.name            AS region_name, \
+  opf.abbreviation  AS opf_abbreviation, \
+  o.name            AS okved_name, \
+  CASE ss.status \
+    WHEN 'ACTIVE'       THEN 1 \
+    WHEN 'REORGANIZING' THEN 2 \
+    WHEN 'LIQUIDATING'  THEN 3 \
+    WHEN 'LIQUIDATED'   THEN 4 \
+    WHEN 'BANKRUPT'     THEN 5 \
+    ELSE 6 \
+  END                AS state_status_order \
+FROM company c \
+LEFT JOIN company_capital   cc ON cc.company_id      = c.id \
+LEFT JOIN subject_state     ss ON ss.company_id      = c.id \
+LEFT JOIN subject_address   sa ON sa.company_id      = c.id \
+LEFT JOIN opf               ON opf.id            = c.opf_id \
+LEFT JOIN region            r  ON r.id             = sa.region_id \
+LEFT JOIN subject_okved     sok ON sok.company_id    = c.id AND sok.is_primary = true \
+LEFT JOIN okved             o  ON o.code           = sok.okved_id
 }
 
 index company_idx
@@ -58,22 +52,25 @@ index company_idx
     min_word_len    = 3
     index_exact_words = 1
 
-    field           = name
-    field           = inn
-    field           = ogrn
-    field           = kpp
-    field           = region_name
-    field           = slug
-    field           = phones
-    field           = emails
-    field           = okved_name
-    field           = opf_abbreviation
-    field           = state_status
-    field           = entity_type
+    field           = name_field
+    field           = inn_field
+    field           = ogrn_field
+    field           = kpp_field
 
-    attr_uint       = state_status_order
-    attr_bigint     = registration_date_int
+    attr_string           = name
+    attr_string     = region_name
+    attr_string     = okved_name
+    attr_string     = state_status
+    attr_string     = entity_type
+
+    attr_string     = slug
     attr_bigint     = capital_value
+    attr_bigint     = registration_date_int
+    attr_bigint     = inn
+    attr_bigint     = ogrn
+    attr_bigint     = kpp
+    attr_string     = opf_abbreviation
+    attr_uint       = state_status_order
 
     charset_table   = 0..9, A..Z->a..z, _, a..z, \
                       U+410..U+42F->U+430..U+44F, \
@@ -90,52 +87,42 @@ source individual_src
     type            = pgsql
     sql_host        = postgres
     sql_port        = 5432
-    sql_user        = ${POSTGRES_USER}
-    sql_pass        = ${POSTGRES_PASSWORD}
-    sql_db          = ${POSTGRES_DB}
+    sql_user        = app
+    sql_pass        = pgps9812contr!
+    sql_db          = app
 
     sql_query = \
-      SELECT (i.surname || ' ' || i.name || COALESCE(' '|| i.patronymic, '')) AS name, \
-             i.inn, \
-             i.ogrnip, \
-             i.phones, \
-             'Individual' AS entity_type, \
-             i.emails, \
-             CASE ss.status \
-               WHEN 'ACTIVE' THEN 1 \
-               WHEN 'LIQUIDATED' THEN 2 \
-               ELSE 3 \
-             END AS state_status_order, \
-             i.slug, \
-             ss.status AS state_status, \
-             TO_CHAR(ss.registration_date, 'YYYYMMDD')::BIGINT AS registration_date_int, \
-             r.name AS region_name, \
-             '' AS ogrn, \
-             '' AS kpp, \
-             '' AS opf_abbreviation, \
-             o.name AS okved_name \
-      FROM individual i \
-      LEFT JOIN subject_state ss ON ss.individual_id = i.id \
-      LEFT JOIN subject_address sa ON sa.individual_id = i.id \
-      LEFT JOIN region r ON r.id = sa.region_id \
-      LEFT JOIN subject_okved sok ON sok.individual_id = i.id AND sok.is_primary = true \
-      LEFT JOIN okved o ON o.code = sok.okved_id
-
-    sql_attr_string = name
-    sql_attr_string = inn
-    sql_attr_string = ogrnip
-    sql_attr_string = region_name
-    sql_attr_string = slug
-    sql_attr_string = phones
-    sql_attr_string = emails
-    sql_attr_string = okved_name
-    sql_attr_string = state_status
-    sql_attr_string = entity_type
-    sql_attr_string = ogrn
-    sql_attr_string = kpp
-    sql_attr_string = opf_abbreviation
-    sql_attr_uint   = state_status_order
-    sql_attr_bigint = registration_date_int
+SELECT \
+  i.id, \
+  (i.surname || ' ' || i.name || COALESCE(' '|| i.patronymic, '')) AS name, \
+  (i.surname || ' ' || i.name || COALESCE(' '|| i.patronymic, '')) AS name_field, \
+  i.inn             AS inn, \
+  i.inn             AS inn_field, \
+  i.ogrnip          AS ogrnip, \
+  i.ogrnip          AS ogrnip_field, \
+  ''                AS kpp, \
+  ''                AS ogrn, \
+  ''                AS ogrn_field, \
+  ''                AS kpp_field, \
+  i.slug            AS slug, \
+  0                 AS capital_value, \
+  'Individual'      AS entity_type, \
+  ss.status         AS state_status, \
+  TO_CHAR(ss.registration_date, 'YYYYMMDD')::BIGINT AS registration_date_int, \
+  r.name            AS region_name, \
+  ''                AS opf_abbreviation, \
+  o.name            AS okved_name, \
+  CASE ss.status \
+    WHEN 'ACTIVE'     THEN 1 \
+    WHEN 'LIQUIDATED' THEN 2 \
+    ELSE 3 \
+  END               AS state_status_order \
+FROM individual i \
+LEFT JOIN subject_state    ss ON ss.individual_id = i.id \
+LEFT JOIN subject_address  sa ON sa.individual_id = i.id \
+LEFT JOIN region           r  ON r.id          = sa.region_id \
+LEFT JOIN subject_okved    sok ON sok.individual_id = i.id AND sok.is_primary = true \
+LEFT JOIN okved            o  ON o.code       = sok.okved_id
 }
 
 index individual_idx
@@ -146,22 +133,30 @@ index individual_idx
     min_word_len    = 3
     index_exact_words = 1
 
-    field           = name
-    field           = inn
-    field           = ogrnip
-    field           = region_name
-    field           = slug
-    field           = phones
-    field           = emails
-    field           = okved_name
-    field           = state_status
-    field           = entity_type
-    field           = ogrn
-    field           = kpp
-    field           = opf_abbreviation
+    #
+    # 1) Полнотекстовые поля (для MATCH)
+    # ищем только по этим полям
+    field = name_field
+    field = inn_field
+    field = ogrn_field
+    field = kpp_field
+    field = ogrnip_field
 
-    attr_uint       = state_status_order
+    attr_string     = region_name
+    attr_string     = okved_name
+    attr_string     = state_status
+    attr_string     = entity_type
+
+    attr_bigint     = kpp              # пустая строка
+    attr_bigint     = ogrn
+    attr_string     = slug
+    attr_string     = name
+    attr_bigint     = capital_value
+    attr_bigint     = inn
+    attr_bigint     = ogrnip
     attr_bigint     = registration_date_int
+    attr_string     = opf_abbreviation # пустая строка
+    attr_uint       = state_status_order
 
     charset_table   = 0..9, A..Z->a..z, _, a..z, \
                       U+410..U+42F->U+430..U+44F, \
@@ -173,6 +168,7 @@ index individual_idx
     expand_keywords = 1
 }
 
+
 index all_entities
 {
     type            = distributed
@@ -180,19 +176,20 @@ index all_entities
     local           = individual_idx
 }
 
+
 searchd
 {
-    listen       = 9312:mysql41
-    listen       = 9315
-    log          = /var/lib/sphinx/logs/searchd.log
-    query_log    = /var/lib/sphinx/logs/query.log
-    binlog_path  = /var/lib/sphinx/binlog
-    pid_file     = /var/lib/sphinx/logs/searchd.pid
+    listen           = 9312:mysql41
+    listen           = 9315
+    log              = /var/lib/sphinx/logs/searchd.log
+    query_log        = /var/lib/sphinx/logs/query.log
+    binlog_path      = /var/lib/sphinx/binlog
+    pid_file         = /var/lib/sphinx/logs/searchd.pid
 
-    read_timeout    = 5
-    max_children    = 30
-    seamless_rotate = 1
-    preopen_indexes = 1
-    unlink_old      = 1
-    workers         = threads
+    read_timeout     = 5
+    max_children     = 30
+    seamless_rotate  = 1
+    preopen_indexes  = 1
+    unlink_old       = 1
+    workers          = threads
 }

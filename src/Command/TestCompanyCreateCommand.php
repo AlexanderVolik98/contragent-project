@@ -37,7 +37,6 @@ class TestCompanyCreateCommand extends Command
             $output->writeln('⏳ Вызываем createCompany()...');
             $company = $this->companyCreateService->createCompany(CompanyDataMapper::map($data[0]['data']));
 
-            dd($company);
             $output->writeln('<info>✅ Компания успешно создана!</info>');
             $output->writeln('ID: ' . $company->getId());
 
