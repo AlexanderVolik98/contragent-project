@@ -87,9 +87,9 @@ source individual_src
     type            = pgsql
     sql_host        = postgres
     sql_port        = 5432
-    sql_user        = app
-    sql_pass        = pgps9812contr!
-    sql_db          = app
+    sql_user        = ${POSTGRES_USER}
+    sql_pass        = ${POSTGRES_PASSWORD}
+    sql_db          = ${POSTGRES_DB}
 
     sql_query = \
 SELECT \

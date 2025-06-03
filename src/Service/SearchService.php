@@ -52,7 +52,7 @@ readonly class SearchService
 
                 if ($company) {
                     return [
-                        'items' =>  new CompanyListingModel($company),
+                        'items' => [ new CompanyListingModel($company) ],
                         'total' => 1,
                     ];
                 }
